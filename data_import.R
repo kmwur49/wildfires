@@ -7,9 +7,10 @@ con <- dbConnect(RSQLite::SQLite(), wildfireDataLoc)
 dbListTables(con)
 
 
-wilfires = dbGetQuery(con, 'SELECT * FROM Fires') %>% collect()
+wildfires = dbGetQuery(con, 'SELECT * FROM Fires') %>% collect()
 
 
+save(wildfires, file = "C:/Users/kwwur/Documents/personal_projects/wildfires_project/data/Fires.Rdata")
 
 dbDisconnect(con)
 

@@ -1,0 +1,161 @@
+---
+title: "Fires Data Exploration"
+format: html
+editor: visual
+---
+
+```{r}
+library(DBI)
+library(dplyr)
+library(ggplot2)
+```
+
+# Load Data
+
+```{r}
+
+wildfireDataLoc = "C:/Users/kwwur/Documents/personal_projects/wildfires_project/data/FPA_FOD_20170508.sqlite"
+
+con <- dbConnect(RSQLite::SQLite(), wildfireDataLoc)
+dbListTables(con)
+
+
+wildfires = dbGetQuery(con, 'SELECT * FROM Fires')
+wildfire_dates = dbGetQuery(con, 'SELECT datetime(DISCOVERY_DATE) AS DISCOVERY_DATE, datetime(CONT_DATE) AS CONT_DATE, OBJECTID FROM FIRES')
+
+wildfires = left_join(wildfires %>% select(-c(DISCOVERY_DATE, CONT_DATE)), wildfire_dates, by = "OBJECTID")
+
+head(wildfires)
+
+# summary doesn't recognize blob type column, so remove the Shape column
+summary(wildfires %>% select(-Shape))
+```
+## Takeaways from summary
+
+Some columns should be converted to factors:
+- STAT_CAUSE_CODE
+
+Some columns should be converted to dates:
+- DISCOVERY_DATE
+- DISCOVERY_DOY
+- CONT_DATE
+- CONT_DOY
+
+
+# Missing Data
+
+## Check for Missing Data
+
+```{r}
+missing_count = colSums(is.na(wildfires))
+
+data.frame(Percent_Missing = missing_count/nrow(wildfires)*100) %>%
+  mutate(Percent_Missing = paste0(round(Percent_Missing, 2), "%"))
+
+cols_w_missing = names(wildfires)[missing_count != 0]
+```
+
+## Takeaways from missing data
+
+Some columns have too much missingness to ignore or reliably impute. Those are:
+
+- LOCAL_FIRE_REPORT_ID
+- LOCAL_INCIDENT_ID
+- FIRE_CODE
+- FIRE_NAME
+- ICS_209_INCIDENT_NUMBER
+- ICS_209_NAME
+- MTBS_ID
+- MTBS_FIRE_NAME
+- COMPLEX_NAME
+- DISCOVERY_TIME
+
+The CONT... columns have a large number of NA values, but NA values may indicate that they are not multiday fires. 
+- CONT_DATE
+- CONT_DOY
+- CONT_TIME
+
+COUNTY, FIPS_CODE, and FIPS_NAME are missing in over one third of entries, but they may be determined using lat/lon coordinates. 
+- COUNTY
+- FIPS_CODE
+- FIPS_NAME
+
+# Histograms
+
+```{r}
+
+ggplot_hist = function(dataset = wildfires,
+                       column_nm,
+                       binwidth = NULL) {
+  ggplot(dataset) +
+    geom_histogram(
+      aes(get(column_nm)),
+      binwidth = binwidth,
+      alpha = .5,
+      color = "black"
+    ) + 
+    xlab(column_nm)
+  
+}
+
+ggplot_hist(column_nm = "FIRE_YEAR", binwidth = 1)
+ggplot_hist(column_nm = "FIRE_SIZE")
+ggplot_hist(data = wildfires %>% select(-Shape) %>% mutate(log_fire_size = log(FIRE_SIZE)), column_nm = "log_fire_size")
+
+```
+## Takeaways
+
+- Relatively consistent number of fires per year
+- Seems to be a large number of smaller fires with a few VERY large fires. TODO: sniff check on the largest fires 
+
+
+# Summary Tables
+
+```{r}
+length(unique(wildfires$OBJECTID))
+length(unique(wildfires$FOD_ID))
+length(unique(wildfires$FPA_ID))
+length(unique(wildfires$SOURCE_SYSTEM_TYPE))
+length(unique(wildfires$SOURCE_SYSTEM))
+length(unique(wildfires$NWCG_REPORTING_AGENCY))
+length(unique(wildfires$NWCG_REPORTING_UNIT_ID))
+length(unique(wildfires$NWCG_REPORTING_UNIT_NAME))
+length(unique(wildfires$SOURCE_REPORTING_UNIT))
+length(unique(wildfires$SOURCE_REPORTING_UNIT_NAME))
+length(unique(wildfires$LOCAL_FIRE_REPORT_ID))
+length(unique(wildfires$LOCAL_INCIDENT_ID))
+length(unique(wildfires$FIRE_CODE))
+length(unique(wildfires$FIRE_NAME))
+length(unique(wildfires$ICS_209_INCIDENT_NUMBER))
+length(unique(wildfires$ICS_209_NAME))
+length(unique(wildfires$MTBS_ID))
+length(unique(wildfires$MTBS_FIRE_NAME))
+length(unique(wildfires$COMPLEX_NAME))
+length(unique(wildfires$FIRE_YEAR))
+length(unique(wildfires$DISCOVERY_DATE))
+length(unique(wildfires$DISCOVERY_DOY))
+length(unique(wildfires$DISCOVERY_TIME))
+length(unique(wildfires$STAT_CAUSE_CODE))
+length(unique(wildfires$STAT_CAUSE_DESCR))
+length(unique(wildfires$CONT_DATE))
+length(unique(wildfires$CONT_DOY))
+length(unique(wildfires$CONT_TIME))
+length(unique(wildfires$FIRE_SIZE))
+length(unique(wildfires$FIRE_SIZE_CLASS))
+length(unique(wildfires$OWNER_CODE))
+length(unique(wildfires$OWNER_DESCR))
+length(unique(wildfires$STATE))
+length(unique(wildfires$COUNTY))
+length(unique(wildfires$FIPS_CODE))
+length(unique(wildfires$FIPS_NAME))
+```
+
+
+# TODOs for data cleaning
+
+```{r}
+# Found this approach online in the data discussion, but would rather consider pulling these columns from SQL differently. This may cause problems in the (likely rare) occasions when the containment date is in the next year after the discovery date
+wildfires$DISCOVERY_DOY <- as.Date(wildfires$DISCOVERY_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
+wildfires$CONT_DOY <- as.Date(wildfires$CONT_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
+```
+
