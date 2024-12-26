@@ -13,23 +13,40 @@ library(ggplot2)
 # Load Data
 
 ```{r}
-
+# Read data
 wildfireDataLoc = "C:/Users/kwwur/Documents/personal_projects/wildfires_project/data/FPA_FOD_20170508.sqlite"
 
 con <- dbConnect(RSQLite::SQLite(), wildfireDataLoc)
 dbListTables(con)
 
-
+# dates are not being read in nicely, so pull those in seperately as datetime
 wildfires = dbGetQuery(con, 'SELECT * FROM Fires')
 wildfire_dates = dbGetQuery(con, 'SELECT datetime(DISCOVERY_DATE) AS DISCOVERY_DATE, datetime(CONT_DATE) AS CONT_DATE, OBJECTID FROM FIRES')
 
 wildfires = left_join(wildfires %>% select(-c(DISCOVERY_DATE, CONT_DATE)), wildfire_dates, by = "OBJECTID")
 
+# create date, year, and month column
+date_processing = function(data, col, out_name){
+  dates = as.Date(data[[col]])
+  years = lubridate::year(dates)
+  months = format(dates, "%m-%Y")
+  column_names = paste0(out_name, c("_date", "_year", "months"))
+  out = data.frame(dates, years, months)
+  names(out) = column_names
+  return(out)
+}
+
+wildfires = cbind(wildfires, date_processing(wildfires, col = "DISCOVERY_DATE", "discovery_processed"))
+wildfires = cbind(wildfires, date_processing(wildfires, col = "CONT_DATE", "contained_processed"))
+
+
+# View data
 head(wildfires)
 
 # summary doesn't recognize blob type column, so remove the Shape column
 summary(wildfires %>% select(-Shape))
 ```
+
 ## Takeaways from summary
 
 Some columns should be converted to factors:
@@ -70,7 +87,7 @@ Some columns have too much missingness to ignore or reliably impute. Those are:
 - COMPLEX_NAME
 - DISCOVERY_TIME
 
-The CONT... columns have a large number of NA values, but NA values may indicate that they are not multiday fires. 
+The CONT... columns have a large number of NA values, but NA values may indicate that they are not multiday fires. TODO: need to research this.  
 - CONT_DATE
 - CONT_DOY
 - CONT_TIME
@@ -101,6 +118,8 @@ ggplot_hist = function(dataset = wildfires,
 ggplot_hist(column_nm = "FIRE_YEAR", binwidth = 1)
 ggplot_hist(column_nm = "FIRE_SIZE")
 ggplot_hist(data = wildfires %>% select(-Shape) %>% mutate(log_fire_size = log(FIRE_SIZE)), column_nm = "log_fire_size")
+ggplot_hist(column_nm = "discovery_processed_date")
+ggplot_hist(column_nm = "contained_processed_date")
 
 ```
 ## Takeaways
@@ -112,12 +131,25 @@ ggplot_hist(data = wildfires %>% select(-Shape) %>% mutate(log_fire_size = log(F
 # Summary Tables
 
 ```{r}
-length(unique(wildfires$OBJECTID))
+# confirm OBJECTID and FODID are unique
+length(unique(wildfires$OBJECTID)) == nrow(wildfires)
 length(unique(wildfires$FOD_ID))
+
+# this id is not unique
 length(unique(wildfires$FPA_ID))
+
+# create table of these columns
 length(unique(wildfires$SOURCE_SYSTEM_TYPE))
 length(unique(wildfires$SOURCE_SYSTEM))
 length(unique(wildfires$NWCG_REPORTING_AGENCY))
+length(unique(wildfires$STAT_CAUSE_CODE))
+length(unique(wildfires$STAT_CAUSE_DESCR))
+length(unique(wildfires$FIRE_SIZE_CLASS))
+length(unique(wildfires$OWNER_CODE))
+length(unique(wildfires$OWNER_DESCR))
+length(unique(wildfires$STATE))
+
+# there are too many of these rows to create tables of
 length(unique(wildfires$NWCG_REPORTING_UNIT_ID))
 length(unique(wildfires$NWCG_REPORTING_UNIT_NAME))
 length(unique(wildfires$SOURCE_REPORTING_UNIT))
@@ -131,31 +163,39 @@ length(unique(wildfires$ICS_209_NAME))
 length(unique(wildfires$MTBS_ID))
 length(unique(wildfires$MTBS_FIRE_NAME))
 length(unique(wildfires$COMPLEX_NAME))
-length(unique(wildfires$FIRE_YEAR))
 length(unique(wildfires$DISCOVERY_DATE))
 length(unique(wildfires$DISCOVERY_DOY))
 length(unique(wildfires$DISCOVERY_TIME))
-length(unique(wildfires$STAT_CAUSE_CODE))
-length(unique(wildfires$STAT_CAUSE_DESCR))
 length(unique(wildfires$CONT_DATE))
 length(unique(wildfires$CONT_DOY))
 length(unique(wildfires$CONT_TIME))
 length(unique(wildfires$FIRE_SIZE))
-length(unique(wildfires$FIRE_SIZE_CLASS))
-length(unique(wildfires$OWNER_CODE))
-length(unique(wildfires$OWNER_DESCR))
-length(unique(wildfires$STATE))
 length(unique(wildfires$COUNTY))
 length(unique(wildfires$FIPS_CODE))
 length(unique(wildfires$FIPS_NAME))
 ```
+```{r}
+create_summary_table = function(data, col_nm){
+  out = data %>% group_by(get(col_nm)) %>% summarize("number of observations" = n())
+  return(out)
+}
 
+create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM_TYPE")
+create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM")
+create_summary_table(data = wildfires, col_nm = "NWCG_REPORTING_AGENCY")
+create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_CODE")
+create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_DESCR")
+create_summary_table(data = wildfires, col_nm = "FIRE_SIZE_CLASS")
+create_summary_table(data = wildfires, col_nm = "OWNER_CODE")
+create_summary_table(data = wildfires, col_nm = "OWNER_DESCR")
+create_summary_table(data = wildfires, col_nm = "STATE")
+```
 
 # TODOs for data cleaning
 
 ```{r}
 # Found this approach online in the data discussion, but would rather consider pulling these columns from SQL differently. This may cause problems in the (likely rare) occasions when the containment date is in the next year after the discovery date
-wildfires$DISCOVERY_DOY <- as.Date(wildfires$DISCOVERY_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
-wildfires$CONT_DOY <- as.Date(wildfires$CONT_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
+# wildfires$DISCOVERY_DOY <- as.Date(wildfires$DISCOVERY_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
+# wildfires$CONT_DOY <- as.Date(wildfires$CONT_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
 ```
 
