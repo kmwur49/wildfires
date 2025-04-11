@@ -13,7 +13,7 @@ library(tigris)
 
 ## Load Data
 
-```{r}
+```{r, results = 'asis'}
 # Read data
 wildfireDataLoc = "C:/Users/kwwur/Documents/personal_projects/wildfires_project/data/FPA_FOD_20170508.sqlite"
 
@@ -42,23 +42,26 @@ wildfires = cbind(wildfires, date_processing(wildfires, col = "CONT_DATE", "cont
 
 
 # View data
-head(wildfires)
+knitr::kable(head(wildfires))
 
 # summary doesn't recognize blob type column, so remove the Shape column
-summary(wildfires %>% select(-Shape))
+knitr::kable(summary(wildfires %>% select(-Shape)))
 ```
 
 ### Takeaways from summary
 
 Some columns should be converted to factors:
-- STAT_CAUSE_CODE
+
+-   STAT_CAUSE_CODE
 
 Some columns should be converted to dates:
-- DISCOVERY_DATE
-- CONT_DATE
 
+-   DISCOVERY_DATE
+
+-   CONT_DATE
 
 ### Address TODOs generated from summary step
+
 ```{r}
 # convert STAT_CAUSE_CODE to a factor so it is not read as a numeric
 wildfires <- wildfires %>% mutate(STAT_CAUSE_CODE = as.factor(STAT_CAUSE_CODE))
@@ -69,7 +72,6 @@ wildfires <- wildfires %>% mutate(DISCOVERY_DATE = as.Date(DISCOVERY_DATE),
 
 ```
 
-
 ## Missing Data
 
 ### Check for Missing Data
@@ -77,8 +79,8 @@ wildfires <- wildfires %>% mutate(DISCOVERY_DATE = as.Date(DISCOVERY_DATE),
 ```{r}
 missing_count = colSums(is.na(wildfires))
 
-data.frame(Percent_Missing = missing_count/nrow(wildfires)*100) %>%
-  mutate(Percent_Missing = paste0(round(Percent_Missing, 2), "%"))
+knitr::kable(data.frame(Percent_Missing = missing_count/nrow(wildfires)*100) %>%
+  mutate(Percent_Missing = paste0(round(Percent_Missing, 2), "%")))
 
 cols_w_missing = names(wildfires)[missing_count != 0]
 ```
@@ -87,31 +89,38 @@ cols_w_missing = names(wildfires)[missing_count != 0]
 
 Some columns have too much missingness to ignore or reliably impute. Those are:
 
-- LOCAL_FIRE_REPORT_ID
-- LOCAL_INCIDENT_ID
-- FIRE_CODE
-- FIRE_NAME
-- ICS_209_INCIDENT_NUMBER
-- ICS_209_NAME
-- MTBS_ID
-- MTBS_FIRE_NAME
-- COMPLEX_NAME
-- DISCOVERY_TIME
+-   LOCAL_FIRE_REPORT_ID
+-   LOCAL_INCIDENT_ID
+-   FIRE_CODE
+-   FIRE_NAME
+-   ICS_209_INCIDENT_NUMBER
+-   ICS_209_NAME
+-   MTBS_ID
+-   MTBS_FIRE_NAME
+-   COMPLEX_NAME
+-   DISCOVERY_TIME
 
-COUNTY is the less nicely formatted version of FIPS_CODE, so we can remove the COUNTY column without losing any information. 
+COUNTY is the less nicely formatted version of FIPS_CODE, so we can remove the COUNTY column without losing any information.
 
-The CONT... columns have a large number of NA values, but NA values may indicate that they are not multi-day fires. The reason for these NA's is not made clear in the data source site. I will keep these columns, but limit to fires with complete informtion when making use of these columns.   
-- CONT_DATE
-- CONT_DOY
-- CONT_TIME
+The CONT... columns have a large number of NA values, but NA values may indicate that they are not multi-day fires. The reason for these NA's is not made clear in the data source site. I will keep these columns, but limit to fires with complete informtion when making use of these columns.
 
-COUNTY, FIPS_CODE, and FIPS_NAME are missing in over one third of entries, but they may be determined using lat/lon coordinates. 
-- COUNTY (but we're going to remove this anyway)
-- FIPS_CODE
-- FIPS_NAME
+-   CONT_DATE
+
+-   CONT_DOY
+
+-   CONT_TIME
+
+COUNTY, FIPS_CODE, and FIPS_NAME are missing in over one third of entries, but they may be determined using lat/lon coordinates.
+
+-   COUNTY (but we're going to remove this anyway)
+
+-   FIPS_CODE
+
+-   FIPS_NAME
 
 ### Address TODOs from missing data
-```{r}
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
 # remove columns we will not be able to use because there is too much missing information
 wildfires <- wildfires %>% select(-c(LOCAL_FIRE_REPORT_ID, 
                                      LOCAL_INCIDENT_ID, 
@@ -177,13 +186,13 @@ Now we want to double check that the county information is now complete
 ```{r}
 # Confirm that FIPS_NAME and FIPS_CODE are now complete
 missing_count = colSums(is.na(wildfires %>% select(FIPS_NAME, FIPS_CODE)))
-missing_count
+knitr::kable(missing_count)
 
 ```
 
 ## Histograms
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 
 ggplot_hist = function(dataset = wildfires,
                        column_nm,
@@ -209,9 +218,8 @@ ggplot_hist(column_nm = "contained_processed_date")
 
 ### Takeaways
 
-- Relatively consistent number of fires per year
-- Seems to be a large number of smaller fires with a few VERY large fires. TODO: sniff check on the largest fires 
-
+-   Relatively consistent number of fires per year
+-   Seems to be a large number of smaller fires with a few VERY large fires. TODO: sniff check on the largest fires
 
 ## Summary Tables
 
@@ -259,22 +267,20 @@ length(unique(wildfires$COUNTY))
 length(unique(wildfires$FIPS_CODE))
 length(unique(wildfires$FIPS_NAME))
 ```
+
 ```{r}
 create_summary_table = function(data, col_nm){
   out = data %>% group_by(get(col_nm)) %>% summarize("number of observations" = n())
   return(out)
 }
 
-create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM_TYPE")
-create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM")
-create_summary_table(data = wildfires, col_nm = "NWCG_REPORTING_AGENCY")
-create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_CODE")
-create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_DESCR")
-create_summary_table(data = wildfires, col_nm = "FIRE_SIZE_CLASS")
-create_summary_table(data = wildfires, col_nm = "OWNER_CODE")
-create_summary_table(data = wildfires, col_nm = "OWNER_DESCR")
-create_summary_table(data = wildfires, col_nm = "STATE")
+knitr::kable(create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM_TYPE"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "SOURCE_SYSTEM"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "NWCG_REPORTING_AGENCY"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_CODE"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "STAT_CAUSE_DESCR"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "FIRE_SIZE_CLASS"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "OWNER_CODE"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "OWNER_DESCR"))
+knitr::kable(create_summary_table(data = wildfires, col_nm = "STATE"))
 ```
-
-
-
