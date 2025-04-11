@@ -4,13 +4,14 @@ format: html
 editor: visual
 ---
 
-```{r}
+```{r, echo = FALSE, message = FALSE}
 library(DBI)
 library(dplyr)
 library(ggplot2)
+library(tigris)
 ```
 
-# Load Data
+## Load Data
 
 ```{r}
 # Read data
@@ -47,21 +48,31 @@ head(wildfires)
 summary(wildfires %>% select(-Shape))
 ```
 
-## Takeaways from summary
+### Takeaways from summary
 
 Some columns should be converted to factors:
 - STAT_CAUSE_CODE
 
 Some columns should be converted to dates:
 - DISCOVERY_DATE
-- DISCOVERY_DOY
 - CONT_DATE
-- CONT_DOY
 
 
-# Missing Data
+### Address TODOs generated from summary step
+```{r}
+# convert STAT_CAUSE_CODE to a factor so it is not read as a numeric
+wildfires <- wildfires %>% mutate(STAT_CAUSE_CODE = as.factor(STAT_CAUSE_CODE))
 
-## Check for Missing Data
+# this date conversion removes the time from the string, but most time information is listed as 00:0000 so that wasn't going to be useful information
+wildfires <- wildfires %>% mutate(DISCOVERY_DATE = as.Date(DISCOVERY_DATE), 
+                                  CONT_DATE = as.Date(CONT_DATE))
+
+```
+
+
+## Missing Data
+
+### Check for Missing Data
 
 ```{r}
 missing_count = colSums(is.na(wildfires))
@@ -72,7 +83,7 @@ data.frame(Percent_Missing = missing_count/nrow(wildfires)*100) %>%
 cols_w_missing = names(wildfires)[missing_count != 0]
 ```
 
-## Takeaways from missing data
+### Takeaways from missing data
 
 Some columns have too much missingness to ignore or reliably impute. Those are:
 
@@ -87,17 +98,90 @@ Some columns have too much missingness to ignore or reliably impute. Those are:
 - COMPLEX_NAME
 - DISCOVERY_TIME
 
-The CONT... columns have a large number of NA values, but NA values may indicate that they are not multiday fires. TODO: need to research this.  
+COUNTY is the less nicely formatted version of FIPS_CODE, so we can remove the COUNTY column without losing any information. 
+
+The CONT... columns have a large number of NA values, but NA values may indicate that they are not multi-day fires. The reason for these NA's is not made clear in the data source site. I will keep these columns, but limit to fires with complete informtion when making use of these columns.   
 - CONT_DATE
 - CONT_DOY
 - CONT_TIME
 
 COUNTY, FIPS_CODE, and FIPS_NAME are missing in over one third of entries, but they may be determined using lat/lon coordinates. 
-- COUNTY
+- COUNTY (but we're going to remove this anyway)
 - FIPS_CODE
 - FIPS_NAME
 
-# Histograms
+### Address TODOs from missing data
+```{r}
+# remove columns we will not be able to use because there is too much missing information
+wildfires <- wildfires %>% select(-c(LOCAL_FIRE_REPORT_ID, 
+                                     LOCAL_INCIDENT_ID, 
+                                     FIRE_CODE, 
+                                     FIRE_NAME, 
+                                     ICS_209_INCIDENT_NUMBER, 
+                                     ICS_209_NAME,
+                                     MTBS_ID, 
+                                     MTBS_FIRE_NAME, 
+                                     COMPLEX_NAME, 
+                                     DISCOVERY_TIME)
+                                  )
+
+# remove COUNTY column since we can get that information from FIPS_CODE
+wildfires <- wildfires %>% select(-COUNTY)
+
+# get US county geometries
+US_counties <- tigris::counties()
+
+# select lat/lon coordinates and format as an sf points object
+lat_lon_coords = wildfires %>% select(LATITUDE, LONGITUDE)
+latlon_pts <- sf::st_as_sf(lat_lon_coords, coords = c("LONGITUDE", "LATITUDE"), crs = 4326)
+
+# transform counties and points geometries to have the same coordinate reference system
+US_counties <- sf::st_transform(US_counties, crs = sf::st_crs(latlon_pts))
+
+# find the index of the county each point falls in 
+intersects <- sf::st_intersects(latlon_pts, US_counties)
+
+# there were two points that were matched to two counties. In those cases, I just selected the first one. 
+county_indexes <- lapply(intersects, function(x){x[1]}) %>% unlist()
+
+# identify the name and fips code of the matched county
+latlon_counties <- US_counties %>% 
+  select("FIPS_NAME_calculated" = "NAME", 
+         "FIPS_CODE_calculated" = "COUNTYFP") %>%
+  as.data.frame() %>%
+  select(-geometry)
+
+point_counties <- latlon_counties[county_indexes,]
+
+# join information back with the wildfire dataset and only use calculated values if original values are missing
+wildfires <- cbind(wildfires, point_counties)
+wildfires <- wildfires %>% mutate(FIPS_NAME = ifelse(is.na(FIPS_NAME), FIPS_NAME_calculated, FIPS_NAME),
+                                  FIPS_CODE = ifelse(is.na(FIPS_CODE), FIPS_CODE_calculated, FIPS_CODE)) %>%
+  select(-c(FIPS_NAME_calculated, FIPS_CODE_calculated))
+row.names(wildfires) <- NULL
+
+# add lat/lon points since that could be useful
+wildfires <- cbind(wildfires, latlon_pts %>% rename("latlon_geometry" = "geometry"))
+
+# add county geometry since that could be useful
+# TODO: this needs to be done in SQL
+# US_counties <- US_counties %>% select(-NAME) %>% rename("county_geometry" = "geometry")
+# which(US_counties$COUNTYFP == wildfires$FIPS_CODE)
+# 
+# wildfires <- left_join(wildfires, US_counties %>% select(-NAME) %>% rename("county_geometry" = "geometry"), by = c("FIPS_CODE" = "COUNTYFP"))
+
+```
+
+Now we want to double check that the county information is now complete
+
+```{r}
+# Confirm that FIPS_NAME and FIPS_CODE are now complete
+missing_count = colSums(is.na(wildfires %>% select(FIPS_NAME, FIPS_CODE)))
+missing_count
+
+```
+
+## Histograms
 
 ```{r}
 
@@ -122,13 +206,14 @@ ggplot_hist(column_nm = "discovery_processed_date")
 ggplot_hist(column_nm = "contained_processed_date")
 
 ```
-## Takeaways
+
+### Takeaways
 
 - Relatively consistent number of fires per year
 - Seems to be a large number of smaller fires with a few VERY large fires. TODO: sniff check on the largest fires 
 
 
-# Summary Tables
+## Summary Tables
 
 ```{r}
 # confirm OBJECTID and FODID are unique
@@ -191,11 +276,5 @@ create_summary_table(data = wildfires, col_nm = "OWNER_DESCR")
 create_summary_table(data = wildfires, col_nm = "STATE")
 ```
 
-# TODOs for data cleaning
 
-```{r}
-# Found this approach online in the data discussion, but would rather consider pulling these columns from SQL differently. This may cause problems in the (likely rare) occasions when the containment date is in the next year after the discovery date
-# wildfires$DISCOVERY_DOY <- as.Date(wildfires$DISCOVERY_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
-# wildfires$CONT_DOY <- as.Date(wildfires$CONT_DOY - 1, origin=paste(wildfires$FIRE_YEAR, 1, 1, sep="-"))
-```
 
