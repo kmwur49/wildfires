@@ -1,0 +1,5557 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.9.80">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Fires Data Exploration</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="fires_data_exploration_files/libs/clipboard/clipboard.min.js"></script>
+  <script src="fires_data_exploration_files/libs/quarto-html/quarto.js"></script>
+  <script src="fires_data_exploration_files/libs/quarto-html/popper.min.js"></script>
+  <script src="fires_data_exploration_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="fires_data_exploration_files/libs/quarto-html/anchor.min.js"></script>
+  <link href="fires_data_exploration_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="fires_data_exploration_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="fires_data_exploration_files/libs/bootstrap/bootstrap.min.js"></script>
+  <link href="fires_data_exploration_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="fires_data_exploration_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body class="fullcontent">
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+<header id="title-block-header" class="quarto-title-block default">
+
+<div class="quarto-title"><h1 class="title display-7">Fires Data Exploration</h1></div></header>
+<div class="cell">
+
+</div>
+<section id="load-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-data">Load Data</h2>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>wildfireDataLoc <span class="ot">=</span> <span class="st">"C:/Users/kwwur/Documents/personal_projects/wildfires_project/data/FPA_FOD_20170508.sqlite"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), wildfireDataLoc)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListTables</span>(con)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code> [1] "ElementaryGeometries"               "Fires"                             
+ [3] "KNN"                                "NWCG_UnitIDActive_20170109"        
+ [5] "SpatialIndex"                       "geom_cols_ref_sys"                 
+ [7] "geometry_columns"                   "geometry_columns_auth"             
+ [9] "geometry_columns_field_infos"       "geometry_columns_statistics"       
+[11] "geometry_columns_time"              "idx_Fires_Shape"                   
+[13] "idx_Fires_Shape_node"               "idx_Fires_Shape_parent"            
+[15] "idx_Fires_Shape_rowid"              "spatial_ref_sys"                   
+[17] "spatial_ref_sys_all"                "spatial_ref_sys_aux"               
+[19] "spatialite_history"                 "sql_statements_log"                
+[21] "sqlite_sequence"                    "vector_layers"                     
+[23] "vector_layers_auth"                 "vector_layers_field_infos"         
+[25] "vector_layers_statistics"           "views_geometry_columns"            
+[27] "views_geometry_columns_auth"        "views_geometry_columns_field_infos"
+[29] "views_geometry_columns_statistics"  "virts_geometry_columns"            
+[31] "virts_geometry_columns_auth"        "virts_geometry_columns_field_infos"
+[33] "virts_geometry_columns_statistics" </code></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dates are not being read in nicely, so pull those in seperately as datetime</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">=</span> <span class="fu">dbGetQuery</span>(con, <span class="st">'SELECT * FROM Fires'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>wildfire_dates <span class="ot">=</span> <span class="fu">dbGetQuery</span>(con, <span class="st">'SELECT datetime(DISCOVERY_DATE) AS DISCOVERY_DATE, datetime(CONT_DATE) AS CONT_DATE, OBJECTID FROM FIRES'</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">=</span> <span class="fu">left_join</span>(wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(DISCOVERY_DATE, CONT_DATE)), wildfire_dates, <span class="at">by =</span> <span class="st">"OBJECTID"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create date, year, and month column</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>date_processing <span class="ot">=</span> <span class="cf">function</span>(data, col, out_name){</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  dates <span class="ot">=</span> <span class="fu">as.Date</span>(data[[col]])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  years <span class="ot">=</span> lubridate<span class="sc">::</span><span class="fu">year</span>(dates)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  months <span class="ot">=</span> <span class="fu">format</span>(dates, <span class="st">"%m-%Y"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  column_names <span class="ot">=</span> <span class="fu">paste0</span>(out_name, <span class="fu">c</span>(<span class="st">"_date"</span>, <span class="st">"_year"</span>, <span class="st">"months"</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">=</span> <span class="fu">data.frame</span>(dates, years, months)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(out) <span class="ot">=</span> column_names</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">=</span> <span class="fu">cbind</span>(wildfires, <span class="fu">date_processing</span>(wildfires, <span class="at">col =</span> <span class="st">"DISCOVERY_DATE"</span>, <span class="st">"discovery_processed"</span>))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">=</span> <span class="fu">cbind</span>(wildfires, <span class="fu">date_processing</span>(wildfires, <span class="at">col =</span> <span class="st">"CONT_DATE"</span>, <span class="st">"contained_processed"</span>))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># View data</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wildfires)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>  OBJECTID FOD_ID     FPA_ID SOURCE_SYSTEM_TYPE SOURCE_SYSTEM
+1        1      1 FS-1418826                FED   FS-FIRESTAT
+2        2      2 FS-1418827                FED   FS-FIRESTAT
+3        3      3 FS-1418835                FED   FS-FIRESTAT
+4        4      4 FS-1418845                FED   FS-FIRESTAT
+5        5      5 FS-1418847                FED   FS-FIRESTAT
+6        6      6 FS-1418849                FED   FS-FIRESTAT
+  NWCG_REPORTING_AGENCY NWCG_REPORTING_UNIT_ID NWCG_REPORTING_UNIT_NAME
+1                    FS                USCAPNF   Plumas National Forest
+2                    FS                USCAENF Eldorado National Forest
+3                    FS                USCAENF Eldorado National Forest
+4                    FS                USCAENF Eldorado National Forest
+5                    FS                USCAENF Eldorado National Forest
+6                    FS                USCAENF Eldorado National Forest
+  SOURCE_REPORTING_UNIT SOURCE_REPORTING_UNIT_NAME LOCAL_FIRE_REPORT_ID
+1                  0511     Plumas National Forest                    1
+2                  0503   Eldorado National Forest                   13
+3                  0503   Eldorado National Forest                   27
+4                  0503   Eldorado National Forest                   43
+5                  0503   Eldorado National Forest                   44
+6                  0503   Eldorado National Forest                   54
+  LOCAL_INCIDENT_ID FIRE_CODE FIRE_NAME ICS_209_INCIDENT_NUMBER ICS_209_NAME
+1            PNF-47      BJ8K  FOUNTAIN                    &lt;NA&gt;         &lt;NA&gt;
+2                13      AAC0    PIGEON                    &lt;NA&gt;         &lt;NA&gt;
+3               021      A32W     SLACK                    &lt;NA&gt;         &lt;NA&gt;
+4                 6      &lt;NA&gt;      DEER                    &lt;NA&gt;         &lt;NA&gt;
+5                 7      &lt;NA&gt;  STEVENOT                    &lt;NA&gt;         &lt;NA&gt;
+6                 8      &lt;NA&gt;    HIDDEN                    &lt;NA&gt;         &lt;NA&gt;
+  MTBS_ID MTBS_FIRE_NAME COMPLEX_NAME FIRE_YEAR DISCOVERY_DOY DISCOVERY_TIME
+1    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2005            33           1300
+2    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2004           133           0845
+3    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2004           152           1921
+4    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2004           180           1600
+5    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2004           180           1600
+6    &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;      2004           182           1800
+  STAT_CAUSE_CODE STAT_CAUSE_DESCR CONT_DOY CONT_TIME FIRE_SIZE FIRE_SIZE_CLASS
+1               9    Miscellaneous       33      1730      0.10               A
+2               1        Lightning      133      1530      0.25               A
+3               5   Debris Burning      152      2024      0.10               A
+4               1        Lightning      185      1400      0.10               A
+5               1        Lightning      185      1200      0.10               A
+6               1        Lightning      183      1600      0.10               A
+  LATITUDE LONGITUDE OWNER_CODE      OWNER_DESCR STATE COUNTY FIPS_CODE
+1 40.03694 -121.0058          5             USFS    CA     63       063
+2 38.93306 -120.4044          5             USFS    CA     61       061
+3 38.98417 -120.7356         13 STATE OR PRIVATE    CA     17       017
+4 38.55917 -119.9133          5             USFS    CA      3       003
+5 38.55917 -119.9331          5             USFS    CA      3       003
+6 38.63528 -120.1036          5             USFS    CA      5       005
+  FIPS_NAME      Shape      DISCOVERY_DATE           CONT_DATE
+1    Plumas blob[60 B] 2005-02-02 00:00:00 2005-02-02 00:00:00
+2    Placer blob[60 B] 2004-05-12 00:00:00 2004-05-12 00:00:00
+3 El Dorado blob[60 B] 2004-05-31 00:00:00 2004-05-31 00:00:00
+4    Alpine blob[60 B] 2004-06-28 00:00:00 2004-07-03 00:00:00
+5    Alpine blob[60 B] 2004-06-28 00:00:00 2004-07-03 00:00:00
+6    Amador blob[60 B] 2004-06-30 00:00:00 2004-07-01 00:00:00
+  discovery_processed_date discovery_processed_year discovery_processedmonths
+1               2005-02-02                     2005                   02-2005
+2               2004-05-12                     2004                   05-2004
+3               2004-05-31                     2004                   05-2004
+4               2004-06-28                     2004                   06-2004
+5               2004-06-28                     2004                   06-2004
+6               2004-06-30                     2004                   06-2004
+  contained_processed_date contained_processed_year contained_processedmonths
+1               2005-02-02                     2005                   02-2005
+2               2004-05-12                     2004                   05-2004
+3               2004-05-31                     2004                   05-2004
+4               2004-07-03                     2004                   07-2004
+5               2004-07-03                     2004                   07-2004
+6               2004-07-01                     2004                   07-2004</code></pre>
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary doesn't recognize blob type column, so remove the Shape column</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Shape))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>    OBJECTID           FOD_ID             FPA_ID          SOURCE_SYSTEM_TYPE
+ Min.   :      1   Min.   :        1   Length:1880465     Length:1880465    
+ 1st Qu.: 470117   1st Qu.:   505500   Class :character   Class :character  
+ Median : 940233   Median :  1067761   Mode  :character   Mode  :character  
+ Mean   : 940233   Mean   : 54840199                                        
+ 3rd Qu.:1410349   3rd Qu.: 19106386                                        
+ Max.   :1880465   Max.   :300348399                                        
+                                                                            
+ SOURCE_SYSTEM      NWCG_REPORTING_AGENCY NWCG_REPORTING_UNIT_ID
+ Length:1880465     Length:1880465        Length:1880465        
+ Class :character   Class :character      Class :character      
+ Mode  :character   Mode  :character      Mode  :character      
+                                                                
+                                                                
+                                                                
+                                                                
+ NWCG_REPORTING_UNIT_NAME SOURCE_REPORTING_UNIT SOURCE_REPORTING_UNIT_NAME
+ Length:1880465           Length:1880465        Length:1880465            
+ Class :character         Class :character      Class :character          
+ Mode  :character         Mode  :character      Mode  :character          
+                                                                          
+                                                                          
+                                                                          
+                                                                          
+ LOCAL_FIRE_REPORT_ID LOCAL_INCIDENT_ID   FIRE_CODE          FIRE_NAME        
+ Length:1880465       Length:1880465     Length:1880465     Length:1880465    
+ Class :character     Class :character   Class :character   Class :character  
+ Mode  :character     Mode  :character   Mode  :character   Mode  :character  
+                                                                              
+                                                                              
+                                                                              
+                                                                              
+ ICS_209_INCIDENT_NUMBER ICS_209_NAME         MTBS_ID         
+ Length:1880465          Length:1880465     Length:1880465    
+ Class :character        Class :character   Class :character  
+ Mode  :character        Mode  :character   Mode  :character  
+                                                              
+                                                              
+                                                              
+                                                              
+ MTBS_FIRE_NAME     COMPLEX_NAME         FIRE_YEAR    DISCOVERY_DOY  
+ Length:1880465     Length:1880465     Min.   :1992   Min.   :  1.0  
+ Class :character   Class :character   1st Qu.:1998   1st Qu.: 89.0  
+ Mode  :character   Mode  :character   Median :2004   Median :164.0  
+                                       Mean   :2004   Mean   :164.7  
+                                       3rd Qu.:2009   3rd Qu.:230.0  
+                                       Max.   :2015   Max.   :366.0  
+                                                                     
+ DISCOVERY_TIME     STAT_CAUSE_CODE  STAT_CAUSE_DESCR      CONT_DOY     
+ Length:1880465     Min.   : 1.000   Length:1880465     Min.   :  1.0   
+ Class :character   1st Qu.: 3.000   Class :character   1st Qu.:102.0   
+ Mode  :character   Median : 5.000   Mode  :character   Median :181.0   
+                    Mean   : 5.979                      Mean   :172.7   
+                    3rd Qu.: 9.000                      3rd Qu.:232.0   
+                    Max.   :13.000                      Max.   :366.0   
+                                                        NA's   :891531  
+  CONT_TIME           FIRE_SIZE        FIRE_SIZE_CLASS       LATITUDE    
+ Length:1880465     Min.   :     0.0   Length:1880465     Min.   :17.94  
+ Class :character   1st Qu.:     0.1   Class :character   1st Qu.:32.82  
+ Mode  :character   Median :     1.0   Mode  :character   Median :35.45  
+                    Mean   :    74.5                      Mean   :36.78  
+                    3rd Qu.:     3.3                      3rd Qu.:40.83  
+                    Max.   :606945.0                      Max.   :70.33  
+                                                                         
+   LONGITUDE         OWNER_CODE   OWNER_DESCR           STATE          
+ Min.   :-178.80   Min.   : 0.0   Length:1880465     Length:1880465    
+ 1st Qu.:-110.36   1st Qu.: 8.0   Class :character   Class :character  
+ Median : -92.04   Median :14.0   Mode  :character   Mode  :character  
+ Mean   : -95.70   Mean   :10.6                                        
+ 3rd Qu.: -82.30   3rd Qu.:14.0                                        
+ Max.   : -65.26   Max.   :15.0                                        
+                                                                       
+    COUNTY           FIPS_CODE          FIPS_NAME         DISCOVERY_DATE    
+ Length:1880465     Length:1880465     Length:1880465     Length:1880465    
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+  CONT_DATE         discovery_processed_date discovery_processed_year
+ Length:1880465     Min.   :1992-01-01       Min.   :1992            
+ Class :character   1st Qu.:1998-09-28       1st Qu.:1998            
+ Mode  :character   Median :2004-06-21       Median :2004            
+                    Mean   :2004-02-28       Mean   :2004            
+                    3rd Qu.:2009-07-23       3rd Qu.:2009            
+                    Max.   :2015-12-31       Max.   :2015            
+                                                                     
+ discovery_processedmonths contained_processed_date contained_processed_year
+ Length:1880465            Min.   :1992-01-01       Min.   :1992            
+ Class :character          1st Qu.:1997-09-09       1st Qu.:1997            
+ Mode  :character          Median :2005-04-06       Median :2005            
+                           Mean   :2004-08-20       Mean   :2004            
+                           3rd Qu.:2011-07-11       3rd Qu.:2011            
+                           Max.   :2016-01-04       Max.   :2016            
+                           NA's   :891531           NA's   :891531          
+ contained_processedmonths
+ Length:1880465           
+ Class :character         
+ Mode  :character         
+                          
+                          
+                          
+                          </code></pre>
+</div>
+</div>
+<section id="takeaways-from-summary" class="level3">
+<h3 class="anchored" data-anchor-id="takeaways-from-summary">Takeaways from summary</h3>
+<p>Some columns should be converted to factors: - STAT_CAUSE_CODE</p>
+<p>Some columns should be converted to dates: - DISCOVERY_DATE - CONT_DATE</p>
+</section>
+<section id="address-todos-generated-from-summary-step" class="level3">
+<h3 class="anchored" data-anchor-id="address-todos-generated-from-summary-step">Address TODOs generated from summary step</h3>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert STAT_CAUSE_CODE to a factor so it is not read as a numeric</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">STAT_CAUSE_CODE =</span> <span class="fu">as.factor</span>(STAT_CAUSE_CODE))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># this date conversion removes the time from the string, but most time information is listed as 00:0000 so that wasn't going to be useful information</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">DISCOVERY_DATE =</span> <span class="fu">as.Date</span>(DISCOVERY_DATE), </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">CONT_DATE =</span> <span class="fu">as.Date</span>(CONT_DATE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="missing-data">Missing Data</h2>
+<section id="check-for-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="check-for-missing-data">Check for Missing Data</h3>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>missing_count <span class="ot">=</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(wildfires))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">Percent_Missing =</span> missing_count<span class="sc">/</span><span class="fu">nrow</span>(wildfires)<span class="sc">*</span><span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Percent_Missing =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(Percent_Missing, <span class="dv">2</span>), <span class="st">"%"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>                           Percent_Missing
+OBJECTID                                0%
+FOD_ID                                  0%
+FPA_ID                                  0%
+SOURCE_SYSTEM_TYPE                      0%
+SOURCE_SYSTEM                           0%
+NWCG_REPORTING_AGENCY                   0%
+NWCG_REPORTING_UNIT_ID                  0%
+NWCG_REPORTING_UNIT_NAME                0%
+SOURCE_REPORTING_UNIT                   0%
+SOURCE_REPORTING_UNIT_NAME              0%
+LOCAL_FIRE_REPORT_ID                 77.6%
+LOCAL_INCIDENT_ID                   43.65%
+FIRE_CODE                           82.73%
+FIRE_NAME                            50.9%
+ICS_209_INCIDENT_NUMBER             98.63%
+ICS_209_NAME                        98.63%
+MTBS_ID                             99.41%
+MTBS_FIRE_NAME                      99.41%
+COMPLEX_NAME                        99.72%
+FIRE_YEAR                               0%
+DISCOVERY_DOY                           0%
+DISCOVERY_TIME                      46.94%
+STAT_CAUSE_CODE                         0%
+STAT_CAUSE_DESCR                        0%
+CONT_DOY                            47.41%
+CONT_TIME                            51.7%
+FIRE_SIZE                               0%
+FIRE_SIZE_CLASS                         0%
+LATITUDE                                0%
+LONGITUDE                               0%
+OWNER_CODE                              0%
+OWNER_DESCR                             0%
+STATE                                   0%
+COUNTY                              36.06%
+FIPS_CODE                           36.06%
+FIPS_NAME                           36.06%
+Shape                                   0%
+DISCOVERY_DATE                          0%
+CONT_DATE                           47.41%
+discovery_processed_date                0%
+discovery_processed_year                0%
+discovery_processedmonths               0%
+contained_processed_date            47.41%
+contained_processed_year            47.41%
+contained_processedmonths           47.41%</code></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cols_w_missing <span class="ot">=</span> <span class="fu">names</span>(wildfires)[missing_count <span class="sc">!=</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="takeaways-from-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="takeaways-from-missing-data">Takeaways from missing data</h3>
+<p>Some columns have too much missingness to ignore or reliably impute. Those are:</p>
+<ul>
+<li>LOCAL_FIRE_REPORT_ID</li>
+<li>LOCAL_INCIDENT_ID</li>
+<li>FIRE_CODE</li>
+<li>FIRE_NAME</li>
+<li>ICS_209_INCIDENT_NUMBER</li>
+<li>ICS_209_NAME</li>
+<li>MTBS_ID</li>
+<li>MTBS_FIRE_NAME</li>
+<li>COMPLEX_NAME</li>
+<li>DISCOVERY_TIME</li>
+</ul>
+<p>COUNTY is the less nicely formatted version of FIPS_CODE, so we can remove the COUNTY column without losing any information.</p>
+<p>The CONT… columns have a large number of NA values, but NA values may indicate that they are not multi-day fires. The reason for these NA’s is not made clear in the data source site. I will keep these columns, but limit to fires with complete informtion when making use of these columns.<br>
+- CONT_DATE - CONT_DOY - CONT_TIME</p>
+<p>COUNTY, FIPS_CODE, and FIPS_NAME are missing in over one third of entries, but they may be determined using lat/lon coordinates. - COUNTY (but we’re going to remove this anyway) - FIPS_CODE - FIPS_NAME</p>
+</section>
+<section id="address-todos-from-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="address-todos-from-missing-data">Address TODOs from missing data</h3>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove columns we will not be able to use because there is too much missing information</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(LOCAL_FIRE_REPORT_ID, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                     LOCAL_INCIDENT_ID, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                     FIRE_CODE, </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                     FIRE_NAME, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                     ICS_209_INCIDENT_NUMBER, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                                     ICS_209_NAME,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                                     MTBS_ID, </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                     MTBS_FIRE_NAME, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                                     COMPLEX_NAME, </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                                     DISCOVERY_TIME)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                                  )</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># remove COUNTY column since we can get that information from FIPS_CODE</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>COUNTY)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># get US county geometries</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>US_counties <span class="ot">&lt;-</span> tigris<span class="sc">::</span><span class="fu">counties</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>Retrieving data for the year 2022</code></pre>
+</div>
+<div class="cell-output-stdout">
+<pre><code>
+Downloading: 160 B     
+Downloading: 160 B     
+Downloading: 29 kB     
+Downloading: 29 kB     
+Downloading: 31 kB     
+Downloading: 31 kB     
+Downloading: 33 kB     
+Downloading: 33 kB     
+Downloading: 36 kB     
+Downloading: 36 kB     
+Downloading: 41 kB     
+Downloading: 41 kB     
+Downloading: 47 kB     
+Downloading: 47 kB     
+Downloading: 49 kB     
+Downloading: 49 kB     
+Downloading: 55 kB     
+Downloading: 55 kB     
+Downloading: 64 kB     
+Downloading: 64 kB     
+Downloading: 73 kB     
+Downloading: 73 kB     
+Downloading: 81 kB     
+Downloading: 81 kB     
+Downloading: 94 kB     
+Downloading: 94 kB     
+Downloading: 100 kB     
+Downloading: 100 kB     
+Downloading: 110 kB     
+Downloading: 110 kB     
+Downloading: 110 kB     
+Downloading: 110 kB     
+Downloading: 110 kB     
+Downloading: 110 kB     
+Downloading: 120 kB     
+Downloading: 120 kB     
+Downloading: 130 kB     
+Downloading: 130 kB     
+Downloading: 130 kB     
+Downloading: 130 kB     
+Downloading: 140 kB     
+Downloading: 140 kB     
+Downloading: 150 kB     
+Downloading: 150 kB     
+Downloading: 150 kB     
+Downloading: 150 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 160 kB     
+Downloading: 170 kB     
+Downloading: 170 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 180 kB     
+Downloading: 190 kB     
+Downloading: 190 kB     
+Downloading: 210 kB     
+Downloading: 210 kB     
+Downloading: 220 kB     
+Downloading: 220 kB     
+Downloading: 240 kB     
+Downloading: 240 kB     
+Downloading: 240 kB     
+Downloading: 240 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 260 kB     
+Downloading: 280 kB     
+Downloading: 280 kB     
+Downloading: 280 kB     
+Downloading: 280 kB     
+Downloading: 280 kB     
+Downloading: 280 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 290 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 310 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 340 kB     
+Downloading: 340 kB     
+Downloading: 340 kB     
+Downloading: 340 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+Downloading: 370 kB     
+Downloading: 370 kB     
+Downloading: 410 kB     
+Downloading: 410 kB     
+Downloading: 410 kB     
+Downloading: 410 kB     
+Downloading: 440 kB     
+Downloading: 440 kB     
+Downloading: 440 kB     
+Downloading: 440 kB     
+Downloading: 470 kB     
+Downloading: 470 kB     
+Downloading: 490 kB     
+Downloading: 490 kB     
+Downloading: 490 kB     
+Downloading: 490 kB     
+Downloading: 490 kB     
+Downloading: 490 kB     
+Downloading: 510 kB     
+Downloading: 510 kB     
+Downloading: 520 kB     
+Downloading: 520 kB     
+Downloading: 540 kB     
+Downloading: 540 kB     
+Downloading: 570 kB     
+Downloading: 570 kB     
+Downloading: 570 kB     
+Downloading: 570 kB     
+Downloading: 590 kB     
+Downloading: 590 kB     
+Downloading: 590 kB     
+Downloading: 590 kB     
+Downloading: 590 kB     
+Downloading: 590 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 600 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 620 kB     
+Downloading: 640 kB     
+Downloading: 640 kB     
+Downloading: 650 kB     
+Downloading: 650 kB     
+Downloading: 650 kB     
+Downloading: 650 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 670 kB     
+Downloading: 690 kB     
+Downloading: 690 kB     
+Downloading: 720 kB     
+Downloading: 720 kB     
+Downloading: 750 kB     
+Downloading: 750 kB     
+Downloading: 780 kB     
+Downloading: 780 kB     
+Downloading: 780 kB     
+Downloading: 780 kB     
+Downloading: 820 kB     
+Downloading: 820 kB     
+Downloading: 830 kB     
+Downloading: 830 kB     
+Downloading: 880 kB     
+Downloading: 880 kB     
+Downloading: 920 kB     
+Downloading: 920 kB     
+Downloading: 920 kB     
+Downloading: 920 kB     
+Downloading: 960 kB     
+Downloading: 960 kB     
+Downloading: 990 kB     
+Downloading: 990 kB     
+Downloading: 1 MB     
+Downloading: 1 MB     
+Downloading: 1 MB     
+Downloading: 1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.1 MB     
+Downloading: 1.2 MB     
+Downloading: 1.2 MB     
+Downloading: 1.2 MB     
+Downloading: 1.2 MB     
+Downloading: 1.2 MB     
+Downloading: 1.2 MB     
+Downloading: 1.4 MB     
+Downloading: 1.4 MB     
+Downloading: 1.5 MB     
+Downloading: 1.5 MB     
+Downloading: 1.7 MB     
+Downloading: 1.7 MB     
+Downloading: 1.7 MB     
+Downloading: 1.7 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.8 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 1.9 MB     
+Downloading: 2.1 MB     
+Downloading: 2.1 MB     
+Downloading: 2.3 MB     
+Downloading: 2.3 MB     
+Downloading: 2.3 MB     
+Downloading: 2.3 MB     
+Downloading: 2.3 MB     
+Downloading: 2.3 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.4 MB     
+Downloading: 2.6 MB     
+Downloading: 2.6 MB     
+Downloading: 2.6 MB     
+Downloading: 2.6 MB     
+Downloading: 2.6 MB     
+Downloading: 2.6 MB     
+Downloading: 2.8 MB     
+Downloading: 2.8 MB     
+Downloading: 3 MB     
+Downloading: 3 MB     
+Downloading: 3.2 MB     
+Downloading: 3.2 MB     
+Downloading: 3.3 MB     
+Downloading: 3.3 MB     
+Downloading: 3.3 MB     
+Downloading: 3.3 MB     
+Downloading: 3.4 MB     
+Downloading: 3.4 MB     
+Downloading: 3.4 MB     
+Downloading: 3.4 MB     
+Downloading: 3.4 MB     
+Downloading: 3.4 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.5 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.6 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.7 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.8 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 3.9 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.1 MB     
+Downloading: 4.2 MB     
+Downloading: 4.2 MB     
+Downloading: 4.2 MB     
+Downloading: 4.2 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.3 MB     
+Downloading: 4.4 MB     
+Downloading: 4.4 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.6 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.7 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.8 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 4.9 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.1 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.2 MB     
+Downloading: 5.3 MB     
+Downloading: 5.3 MB     
+Downloading: 5.3 MB     
+Downloading: 5.3 MB     
+Downloading: 5.3 MB     
+Downloading: 5.3 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.4 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.5 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.6 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.7 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.8 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 5.9 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.1 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.2 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.3 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.4 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.5 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.6 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.7 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.8 MB     
+Downloading: 6.9 MB     
+Downloading: 6.9 MB     
+Downloading: 6.9 MB     
+Downloading: 6.9 MB     
+Downloading: 7 MB     
+Downloading: 7 MB     
+Downloading: 7 MB     
+Downloading: 7 MB     
+Downloading: 7.1 MB     
+Downloading: 7.1 MB     
+Downloading: 7.2 MB     
+Downloading: 7.2 MB     
+Downloading: 7.2 MB     
+Downloading: 7.2 MB     
+Downloading: 7.2 MB     
+Downloading: 7.2 MB     
+Downloading: 7.4 MB     
+Downloading: 7.4 MB     
+Downloading: 7.4 MB     
+Downloading: 7.4 MB     
+Downloading: 7.4 MB     
+Downloading: 7.4 MB     
+Downloading: 7.5 MB     
+Downloading: 7.5 MB     
+Downloading: 7.5 MB     
+Downloading: 7.5 MB     
+Downloading: 7.7 MB     
+Downloading: 7.7 MB     
+Downloading: 7.7 MB     
+Downloading: 7.7 MB     
+Downloading: 7.7 MB     
+Downloading: 7.7 MB     
+Downloading: 7.9 MB     
+Downloading: 7.9 MB     
+Downloading: 8 MB     
+Downloading: 8 MB     
+Downloading: 8 MB     
+Downloading: 8 MB     
+Downloading: 8 MB     
+Downloading: 8 MB     
+Downloading: 8.2 MB     
+Downloading: 8.2 MB     
+Downloading: 8.4 MB     
+Downloading: 8.4 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.6 MB     
+Downloading: 8.8 MB     
+Downloading: 8.8 MB     
+Downloading: 9 MB     
+Downloading: 9 MB     
+Downloading: 9.1 MB     
+Downloading: 9.1 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.3 MB     
+Downloading: 9.5 MB     
+Downloading: 9.5 MB     
+Downloading: 9.7 MB     
+Downloading: 9.7 MB     
+Downloading: 9.9 MB     
+Downloading: 9.9 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 10 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 11 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 12 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 13 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 14 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 15 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 16 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 17 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 18 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 19 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 20 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 21 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 22 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 23 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 24 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 25 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 26 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 27 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 28 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 29 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 30 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 31 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 32 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 33 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 34 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 35 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 36 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 37 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 38 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 39 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 40 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 41 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 42 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 43 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 44 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 45 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 46 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 47 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 48 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 49 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 50 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 51 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 52 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 53 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 54 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 55 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 56 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 57 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 58 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 59 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 60 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 61 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 62 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 63 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 64 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 65 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 66 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 67 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 68 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 69 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 70 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 71 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 72 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 73 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 74 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 75 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 76 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 77 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 78 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 79 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 80 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 81 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 82 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     
+Downloading: 83 MB     </code></pre>
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select lat/lon coordinates and format as an sf points object</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>lat_lon_coords <span class="ot">=</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(LATITUDE, LONGITUDE)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>latlon_pts <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(lat_lon_coords, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"LONGITUDE"</span>, <span class="st">"LATITUDE"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transform counties and points geometries to have the same coordinate reference system</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>US_counties <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_transform</span>(US_counties, <span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(latlon_pts))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># find the index of the county each point falls in </span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>intersects <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_intersects</span>(latlon_pts, US_counties)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># there were two points that were matched to two counties. In those cases, I just selected the first one. </span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>county_indexes <span class="ot">&lt;-</span> <span class="fu">lapply</span>(intersects, <span class="cf">function</span>(x){x[<span class="dv">1</span>]}) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>()</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># identify the name and fips code of the matched county</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>latlon_counties <span class="ot">&lt;-</span> US_counties <span class="sc">%&gt;%</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"FIPS_NAME_calculated"</span> <span class="ot">=</span> <span class="st">"NAME"</span>, </span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">"FIPS_CODE_calculated"</span> <span class="ot">=</span> <span class="st">"COUNTYFP"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>geometry)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>point_counties <span class="ot">&lt;-</span> latlon_counties[county_indexes,]</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="co"># join information back with the wildfire dataset and only use calculated values if original values are missing</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> <span class="fu">cbind</span>(wildfires, point_counties)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">FIPS_NAME =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(FIPS_NAME), FIPS_NAME_calculated, FIPS_NAME),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">FIPS_CODE =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(FIPS_CODE), FIPS_CODE_calculated, FIPS_CODE)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(FIPS_NAME_calculated, FIPS_CODE_calculated))</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(wildfires) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co"># add lat/lon points since that could be useful</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>wildfires <span class="ot">&lt;-</span> <span class="fu">cbind</span>(wildfires, latlon_pts <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"latlon_geometry"</span> <span class="ot">=</span> <span class="st">"geometry"</span>))</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co"># add county geometry since that could be useful</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: this needs to be done in SQL</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="co"># US_counties &lt;- US_counties %&gt;% select(-NAME) %&gt;% rename("county_geometry" = "geometry")</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="co"># which(US_counties$COUNTYFP == wildfires$FIPS_CODE)</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="co"># wildfires &lt;- left_join(wildfires, US_counties %&gt;% select(-NAME) %&gt;% rename("county_geometry" = "geometry"), by = c("FIPS_CODE" = "COUNTYFP"))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we want to double check that the county information is now complete</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm that FIPS_NAME and FIPS_CODE are now complete</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>missing_count <span class="ot">=</span> <span class="fu">colSums</span>(<span class="fu">is.na</span>(wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(FIPS_NAME, FIPS_CODE)))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>missing_count</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>FIPS_NAME FIPS_CODE 
+        7         7 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="histograms" class="level2">
+<h2 class="anchored" data-anchor-id="histograms">Histograms</h2>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ggplot_hist <span class="ot">=</span> <span class="cf">function</span>(<span class="at">dataset =</span> wildfires,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                       column_nm,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">binwidth =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(dataset) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="fu">get</span>(column_nm)),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">binwidth =</span> binwidth,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> .<span class="dv">5</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(column_nm)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_hist</span>(<span class="at">column_nm =</span> <span class="st">"FIRE_YEAR"</span>, <span class="at">binwidth =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="fires_data_exploration_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_hist</span>(<span class="at">column_nm =</span> <span class="st">"FIRE_SIZE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="fires_data_exploration_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_hist</span>(<span class="at">data =</span> wildfires <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Shape) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">log_fire_size =</span> <span class="fu">log</span>(FIRE_SIZE)), <span class="at">column_nm =</span> <span class="st">"log_fire_size"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="fires_data_exploration_files/figure-html/unnamed-chunk-7-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_hist</span>(<span class="at">column_nm =</span> <span class="st">"discovery_processed_date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="fires_data_exploration_files/figure-html/unnamed-chunk-7-4.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot_hist</span>(<span class="at">column_nm =</span> <span class="st">"contained_processed_date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-stderr">
+<pre><code>Warning: Removed 891531 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="fires_data_exploration_files/figure-html/unnamed-chunk-7-5.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<section id="takeaways" class="level3">
+<h3 class="anchored" data-anchor-id="takeaways">Takeaways</h3>
+<ul>
+<li>Relatively consistent number of fires per year</li>
+<li>Seems to be a large number of smaller fires with a few VERY large fires. TODO: sniff check on the largest fires</li>
+</ul>
+</section>
+</section>
+<section id="summary-tables" class="level2">
+<h2 class="anchored" data-anchor-id="summary-tables">Summary Tables</h2>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># confirm OBJECTID and FODID are unique</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>OBJECTID)) <span class="sc">==</span> <span class="fu">nrow</span>(wildfires)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FOD_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1880465</code></pre>
+</div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this id is not unique</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FPA_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1880462</code></pre>
+</div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create table of these columns</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>SOURCE_SYSTEM_TYPE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>SOURCE_SYSTEM))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 38</code></pre>
+</div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>NWCG_REPORTING_AGENCY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 11</code></pre>
+</div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>STAT_CAUSE_CODE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 13</code></pre>
+</div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>STAT_CAUSE_DESCR))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 13</code></pre>
+</div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIRE_SIZE_CLASS))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>OWNER_CODE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 16</code></pre>
+</div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>OWNER_DESCR))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 16</code></pre>
+</div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>STATE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 52</code></pre>
+</div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># there are too many of these rows to create tables of</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>NWCG_REPORTING_UNIT_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1640</code></pre>
+</div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>NWCG_REPORTING_UNIT_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1635</code></pre>
+</div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>SOURCE_REPORTING_UNIT))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 4992</code></pre>
+</div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>SOURCE_REPORTING_UNIT_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 4441</code></pre>
+</div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>LOCAL_FIRE_REPORT_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>LOCAL_INCIDENT_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIRE_CODE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIRE_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>ICS_209_INCIDENT_NUMBER))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>ICS_209_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>MTBS_ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>MTBS_FIRE_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>COMPLEX_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>DISCOVERY_DATE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 8766</code></pre>
+</div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>DISCOVERY_DOY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 366</code></pre>
+</div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>DISCOVERY_TIME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>CONT_DATE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 8761</code></pre>
+</div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>CONT_DOY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 367</code></pre>
+</div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>CONT_TIME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1442</code></pre>
+</div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIRE_SIZE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 13637</code></pre>
+</div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>COUNTY))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIPS_CODE))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 320</code></pre>
+</div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(wildfires<span class="sc">$</span>FIPS_NAME))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code>[1] 1897</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb97"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>create_summary_table <span class="ot">=</span> <span class="cf">function</span>(data, col_nm){</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="fu">get</span>(col_nm)) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="st">"number of observations"</span> <span class="ot">=</span> <span class="fu">n</span>())</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(out)</span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"SOURCE_SYSTEM_TYPE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  `get(col_nm)` `number of observations`
+  &lt;chr&gt;                            &lt;int&gt;
+1 FED                             481106
+2 INTERAGCY                        37211
+3 NONFED                         1362148</code></pre>
+</div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"SOURCE_SYSTEM"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 38 × 2
+   `get(col_nm)` `number of observations`
+   &lt;chr&gt;                            &lt;int&gt;
+ 1 DOI-WFMI                        241423
+ 2 FA-NFIRS                          3387
+ 3 FS-FIRESTAT                     220356
+ 4 FWS-FMIS                         19327
+ 5 IA-AKACC                          3713
+ 6 IA-HIWMO                          9714
+ 7 IA-ICS209                         1983
+ 8 IA-PRIITF                        21802
+ 9 ST-ALALS                         54951
+10 ST-ARARS                         11303
+# ℹ 28 more rows</code></pre>
+</div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"NWCG_REPORTING_AGENCY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   `get(col_nm)` `number of observations`
+   &lt;chr&gt;                            &lt;int&gt;
+ 1 BIA                             119943
+ 2 BLM                              97034
+ 3 BOR                                 14
+ 4 DOD                                 81
+ 5 DOE                                  2
+ 6 FS                              220497
+ 7 FWS                              19331
+ 8 IA                               21841
+ 9 NPS                              20893
+10 ST/C&amp;L                         1377090
+11 TRIBE                             3739</code></pre>
+</div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"STAT_CAUSE_CODE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+   `get(col_nm)` `number of observations`
+   &lt;fct&gt;                            &lt;int&gt;
+ 1 1                               278468
+ 2 2                               147612
+ 3 3                                52869
+ 4 4                                76139
+ 5 5                               429028
+ 6 6                                33455
+ 7 7                               281455
+ 8 8                                61167
+ 9 9                               323805
+10 10                               11500
+11 11                               14448
+12 12                                3796
+13 13                              166723</code></pre>
+</div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"STAT_CAUSE_DESCR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 13 × 2
+   `get(col_nm)`     `number of observations`
+   &lt;chr&gt;                                &lt;int&gt;
+ 1 Arson                               281455
+ 2 Campfire                             76139
+ 3 Children                             61167
+ 4 Debris Burning                      429028
+ 5 Equipment Use                       147612
+ 6 Fireworks                            11500
+ 7 Lightning                           278468
+ 8 Miscellaneous                       323805
+ 9 Missing/Undefined                   166723
+10 Powerline                            14448
+11 Railroad                             33455
+12 Smoking                              52869
+13 Structure                             3796</code></pre>
+</div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"FIRE_SIZE_CLASS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 7 × 2
+  `get(col_nm)` `number of observations`
+  &lt;chr&gt;                            &lt;int&gt;
+1 A                               666919
+2 B                               939376
+3 C                               220077
+4 D                                28427
+5 E                                14107
+6 F                                 7786
+7 G                                 3773</code></pre>
+</div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"OWNER_CODE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   `get(col_nm)` `number of observations`
+           &lt;dbl&gt;                    &lt;int&gt;
+ 1             0                       15
+ 2             1                    63278
+ 3             2                   106819
+ 4             3                    17524
+ 5             4                    12191
+ 6             5                   188338
+ 7             6                     6452
+ 8             7                    30790
+ 9             8                   314822
+10             9                     8952
+11            10                      285
+12            11                     1841
+13            12                     4236
+14            13                    71881
+15            14                  1050835
+16            15                     2206</code></pre>
+</div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"OWNER_DESCR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   `get(col_nm)`         `number of observations`
+   &lt;chr&gt;                                    &lt;int&gt;
+ 1 BIA                                     106819
+ 2 BLM                                      63278
+ 3 BOR                                        285
+ 4 COUNTY                                    1841
+ 5 FOREIGN                                     15
+ 6 FWS                                      12191
+ 7 MISSING/NOT SPECIFIED                  1050835
+ 8 MUNICIPAL/LOCAL                           4236
+ 9 NPS                                      17524
+10 OTHER FEDERAL                             6452
+11 PRIVATE                                 314822
+12 STATE                                    30790
+13 STATE OR PRIVATE                         71881
+14 TRIBAL                                    8952
+15 UNDEFINED FEDERAL                         2206
+16 USFS                                    188338</code></pre>
+</div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_summary_table</span>(<span class="at">data =</span> wildfires, <span class="at">col_nm =</span> <span class="st">"STATE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-stdout">
+<pre><code># A tibble: 52 × 2
+   `get(col_nm)` `number of observations`
+   &lt;chr&gt;                            &lt;int&gt;
+ 1 AK                               12843
+ 2 AL                               66570
+ 3 AR                               31663
+ 4 AZ                               71586
+ 5 CA                              189550
+ 6 CO                               34157
+ 7 CT                                4976
+ 8 DC                                  66
+ 9 DE                                 171
+10 FL                               90261
+# ℹ 42 more rows</code></pre>
+</div>
+</div>
+</section>
+</main>
+<!-- /main column -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+</body></html>
